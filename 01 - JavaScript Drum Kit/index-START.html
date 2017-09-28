@@ -62,33 +62,40 @@
   
   const keyCodeArray = [];
   
-  const activateDrumSound = keyCode => {
-    const audioElement = document.querySelector(`audio[data-key="${keyCode}"]`);
-    
-    audioElement.play();
-  }
-  
   for (let drumButton of drumButtonsCollection) {
     let currentKeyCode = Number.parseInt(drumButton.getAttribute('data-key'));
     keyCodeArray.push(currentKeyCode);
-    
-    drumButton.addEventListener('click', e => {
-      e.preventDefault();
-      activateDrumSound(currentKeyCode);
-    });
   }
   
-  // listen for key up event and trigger the activateDrumSound function
-  document.addEventListener('keyup', function (e) {
+  const playSound = e => {
     const currentKeyCode = e.keyCode;
     
     // avoid triggering the function if the current key code is not contained within the available array of keys
     if (keyCodeArray.includes(currentKeyCode)) {
-      activateDrumSound(e.keyCode);
+      const audioElement = document.querySelector(`audio[data-key="${currentKeyCode}"]`);
+      const drumButton = document.querySelector(`div[data-key="${currentKeyCode}"]`);
+    
+      audioElement.currentTime = 0; // rewind the audio element
+      audioElement.play();
+      
+      drumButton.classList.add('playing');
     }
+  }
+  
+  function removeActiveState  (e) {
+    if (e.propertyName === 'transform') {
+      this.classList.remove('playing');
+    }
+  }
+  
+  // listen to transition end event and remove the class name
+  drumButtonsCollection.forEach(drumButton => {
+    drumButton.addEventListener('transitionend', removeActiveState);
   });
+  
+  // listen for key down event and trigger the playSound function
+  window.addEventListener('keydown', playSound);
 </script>
-
 
 </body>
 </html>
