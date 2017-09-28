@@ -21,7 +21,23 @@
   <img src="https://source.unsplash.com/7bwQXzbF6KE/800x500">
 
   <style>
-
+  
+    :root {
+      --base: #ffc600;
+      --spacing: 10px;
+      --blur: 10px;
+    }
+    
+    img {
+      background: var(--base);
+      padding: var(--spacing);
+      filter: blur(var(--blur));
+    }
+    
+    .hl {
+      color: var(--base);
+    }
+    
     /*
       misc styles, nothing to do with CSS variables
     */
@@ -40,11 +56,23 @@
     }
 
     input {
-      width:100px;
+      width: 100px;
     }
   </style>
 
   <script>
+  const inputsCollection = document.querySelectorAll('input');
+  
+  function handleInput (e) {
+    const dataSizing = this.getAttribute('data-sizing');
+    
+    document.documentElement.style.setProperty(`--${this.name}`, dataSizing ? this.value + dataSizing : this.value);
+  }
+  
+  inputsCollection.forEach(input => {
+    input.addEventListener('change', handleInput);
+  });
+  
   </script>
 
 </body>
