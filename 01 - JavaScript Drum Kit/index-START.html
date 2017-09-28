@@ -58,7 +58,35 @@
   <audio data-key="76" src="sounds/tink.wav"></audio>
 
 <script>
-
+  const drumButtonsCollection = document.querySelectorAll('.key');
+  
+  const keyCodeArray = [];
+  
+  const activateDrumSound = keyCode => {
+    const audioElement = document.querySelector(`audio[data-key="${keyCode}"]`);
+    
+    audioElement.play();
+  }
+  
+  for (let drumButton of drumButtonsCollection) {
+    let currentKeyCode = Number.parseInt(drumButton.getAttribute('data-key'));
+    keyCodeArray.push(currentKeyCode);
+    
+    drumButton.addEventListener('click', e => {
+      e.preventDefault();
+      activateDrumSound(currentKeyCode);
+    });
+  }
+  
+  // listen for key up event and trigger the activateDrumSound function
+  document.addEventListener('keyup', function (e) {
+    const currentKeyCode = e.keyCode;
+    
+    // avoid triggering the function if the current key code is not contained within the available array of keys
+    if (keyCodeArray.includes(currentKeyCode)) {
+      activateDrumSound(e.keyCode);
+    }
+  });
 </script>
 
 
