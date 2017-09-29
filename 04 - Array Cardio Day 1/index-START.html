@@ -56,8 +56,8 @@
     // Array.prototype.reduce()
     // 4. How many years did all the inventors live?
     
-    const totalInventorsLifeDuration = inventors.reduce((prev, current) => {
-      return current.passed - current.year + prev;
+    const totalInventorsLifeDuration = inventors.reduce((acc, current) => {
+      return acc + current.passed - current.year;
     }, 0);
     console.log(totalInventorsLifeDuration);
 
